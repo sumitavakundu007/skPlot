@@ -19,7 +19,8 @@ python3 setup.py install --user
 
 ## Usage
 
-```python3.X main.py
+```bash
+python3.X main.py
 ```
 
 ## Contributing
