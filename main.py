@@ -304,8 +304,8 @@ class plot_save:
         self.xx, self.yy = [], []
         for i in range(len(self.x_arr)):
             hist, edges = np.histogram(self.x_arr[i], self.bin_var.get(), range=(self.range_var_low.get(), self.range_var_high.get()), density=self.density_var.get())
-            self.yy.append(hist)
-            self.xx.append(edges[:-1])
+            self.yy.append(hist.round(3).tolist())
+            self.xx.append(edges[:-1].round(3).tolist())
 
         for i in range(len(self.xx)):
             self.ax.bar(self.xx[i], self.yy[i], width=self.width_var.get(), color=self.color_var.get())
@@ -382,20 +382,23 @@ class plot_save:
                 self.ax.set_xticks(x_level)
                 self.ax.set_yticks(y_level)
                 self.ax.tick_params(axis='both', direction=str(self.xy_ticks.get()), length=self.tk_len.get(), labelsize=self.tkFont.get())
-            elif self.xy_ticks.get() !=0 and self.tk_len.get() != 0:
-                mix_x_arr, mix_y_arr = [], []
-                for i in range(len(self.x_arr)):
-                    for j in range(len(self.x_arr[i])):
-                        mix_x_arr.append(self.x_arr[i][j])
-                        mix_y_arr.append(self.y_arr[i][j])
+            elif self.xy_ticks.get() !=0 and self.tk_len.get() != 0 and self.xLower.get() == 0 and self.xUpper.get() == 0 and self.yLower.get() == 0 and self.yUpper.get() == 0:
+                if self.tk_xbin.get() != 0 and self.tk_ybin.get() != 0:
+                    mix_x_arr, mix_y_arr = [], []
+                    for i in range(len(self.x_arr)):
+                        for j in range(len(self.x_arr[i])):
+                            mix_x_arr.append(self.x_arr[i][j])
+                            mix_y_arr.append(self.y_arr[i][j])
 
-                x_width = (np.max(mix_x_arr) - np.min(mix_x_arr))/self.tk_xbin.get()
-                y_width = (np.max(mix_y_arr) - np.min(mix_y_arr))/self.tk_ybin.get()
-                x_level = np.arange(np.min(mix_x_arr), np.max(mix_x_arr), float(x_width), dtype=float)
-                y_level = np.arange(np.min(mix_y_arr), np.max(mix_y_arr), float(y_width), dtype=float)
-                self.ax.set_xticks(x_level)
-                self.ax.set_yticks(y_level)
-                self.ax.tick_params(axis='both', direction=str(self.xy_ticks.get()), length=self.tk_len.get(), labelsize=self.tkFont.get())
+                    x_width = (np.max(mix_x_arr) - np.min(mix_x_arr))/self.tk_xbin.get()
+                    y_width = (np.max(mix_y_arr) - np.min(mix_y_arr))/self.tk_ybin.get()
+                    x_level = np.arange(np.min(mix_x_arr), np.max(mix_x_arr), float(x_width), dtype=float)
+                    y_level = np.arange(np.min(mix_y_arr), np.max(mix_y_arr), float(y_width), dtype=float)
+                    self.ax.set_xticks(x_level)
+                    self.ax.set_yticks(y_level)
+                    self.ax.tick_params(axis='both', direction=str(self.xy_ticks.get()), length=self.tk_len.get(), labelsize=self.tkFont.get())
+                else:
+                    self.ax.tick_params(axis='both', direction=str(self.xy_ticks.get()), length=self.tk_len.get(), labelsize=self.tkFont.get())
 
         if self.num_cols != 3 and self.num_cols == 1:
             if self.xy_ticks.get() !=0 and self.tk_len.get() != 0 and self.xLower.get() != 0 and self.xUpper.get() != 0 and self.yLower.get() != 0 and self.yUpper.get() != 0:
@@ -407,19 +410,28 @@ class plot_save:
                 self.ax.set_yticks(y_level)
                 self.ax.tick_params(axis='both', direction=str(self.xy_ticks.get()), length=self.tk_len.get(), labelsize=self.tkFont.get())       
             elif self.xy_ticks.get() !=0 and self.tk_len.get() != 0 and self.xLower.get() == 0 and self.xUpper.get() == 0 and self.yLower.get() == 0 and self.yUpper.get() == 0:
-                mix_x_arr, mix_y_arr = [], []
-                for i in range(len(self.xx)):
-                    for j in range(len(self.xx[i])):
-                        mix_x_arr.append(self.xx[i][j])
-                        mix_y_arr.append(self.yy[i][j])
+                if self.tk_xbin.get() != 0 and self.tk_ybin.get() != 0:
+                    mix_x_arr, mix_y_arr = [], []
+                    for i in range(len(self.xx)):
+                        for j in range(len(self.xx[i])):
+                            mix_x_arr.append(self.xx[i][j])
+                            mix_y_arr.append(self.yy[i][j])
 
-                x_width = (np.max(mix_x_arr) - np.min(mix_x_arr))/self.tk_xbin.get()
-                y_width = (np.max(mix_y_arr) - np.min(mix_y_arr))/self.tk_ybin.get()
-                x_level = np.arange(np.min(mix_x_arr), np.max(mix_x_arr), float(x_width), dtype=float)
-                y_level = np.arange(np.min(mix_y_arr), np.max(mix_y_arr), float(y_width), dtype=float)
-                self.ax.set_xticks(x_level, fontsize=self.tkFont.get())
-                self.ax.set_yticks(y_level, fontsize=self.tkFont.get())
-                self.ax.tick_params(axis='both', direction=str(self.xy_ticks.get()), length=self.tk_len.get(), labelsize=self.tkFont.get())
+                    x_width = (np.max(mix_x_arr) - np.min(mix_x_arr))/self.tk_xbin.get()
+                    y_width = (np.max(mix_y_arr) - 0.0)/self.tk_ybin.get()
+                    x_level = np.arange(np.min(mix_x_arr), np.max(mix_x_arr), float(x_width), dtype=float)
+                    y_level = np.arange(0.0, np.max(mix_y_arr), float(y_width), dtype=float)
+                    x_level = x_level.round(0)
+                    if self.density_var.get() == 'True':
+                        y_level = y_level.round(3)
+                    else:
+                        y_level = y_level.round(0)
+                    self.ax.set_xticks(x_level)
+                    self.ax.set_yticks(y_level)
+                    self.ax.tick_params(axis='both', direction=str(self.xy_ticks.get()), length=self.tk_len.get(), labelsize=self.tkFont.get())
+                elif self.tk_xbin.get() == 0 and self.tk_ybin.get() == 0:
+                    self.ax.tick_params(axis='both', direction=str(self.xy_ticks.get()), length=self.tk_len.get(), labelsize=self.tkFont.get())
+
 
         self.fig.tight_layout()
         disconnect_zoom = zoom_factory(self.ax)
