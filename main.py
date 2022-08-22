@@ -94,6 +94,27 @@ class plot_save:
         self.toolbar = NavigationToolbar2Tk(self.canvas, window, pack_toolbar=True)
         self.toolbar.update()
 
+    def scatter_file(self):
+        self.num_cols = 4
+        self.x_arr, self.y_arr = [], []
+        for i in self.filePaths:
+            self.x_arr.append(np.loadtxt(i)[:, 0])
+            self.y_arr.append(np.loadtxt(i)[:, 1])
+        self.fig = Figure(figsize=(3, 3))
+        self.ax = self.fig.add_subplot()
+        for i in range(len(self.x_arr)):
+            self.ax.scatter(self.x_arr[i], self.y_arr[i])
+        self.fig.tight_layout()
+        disconnect_zoom = zoom_factory(self.ax)
+        display(self.fig.canvas)
+        pan_handler = panhandler(self.fig)
+        display(self.fig.canvas)
+        self.canvas = FigureCanvasTkAgg(self.fig, master=window)  
+        self.canvas.draw()
+        self.canvas.get_tk_widget().pack(side=TOP, expand=1)
+        self.toolbar = NavigationToolbar2Tk(self.canvas, window, pack_toolbar=True)
+        self.toolbar.update()
+
     def plot3d(self):
         self.num_cols = 3
         self.x_arr, self.y_arr, self.z_arr = [], [], []
@@ -263,6 +284,21 @@ class plot_save:
                 else:
                     self.ax.plot(self.x_arr[i], self.y_arr[i])
 
+    def scatter_plot(self):
+        self.ax = self.fig.add_subplot()
+        if len(self.x_arr) == len(self.y_arr):
+            for i in range(len(self.x_arr)):
+                if self.legend_var_arr[i].get() != 0 and self.new_var_arr[i].get() != 0:
+                    self.ax.scatter(self.x_arr[i], self.y_arr[i], c=self.new_var_arr[i].get(), label=self.legend_var_arr[i].get())
+                    self.ax.legend(fontsize=self.lgdFont.get(), loc=str(self.lgdLoc.get()))
+                elif self.legend_var_arr[i].get() == 0 and self.new_var_arr[i].get() != 0:
+                    self.ax.scatter(self.x_arr[i], self.y_arr[i], c=self.new_var_arr[i].get())
+                elif self.legend_var_arr[i].get() != 0 and self.new_var_arr[i].get() == 0:
+                    self.ax.scatter(self.x_arr[i], self.y_arr[i], label=self.legend_var_arr[i].get())
+                    self.ax.legend(fontsize=self.lgdFont.get(), loc=str(self.lgdLoc.get()))
+                else:
+                    self.ax.scatter(self.x_arr[i], self.y_arr[i])
+
     def hist_plot(self):
         self.ax = self.fig.add_subplot()
         self.xx, self.yy = [], []
@@ -296,7 +332,8 @@ class plot_save:
                 cbar.ax.tick_params(labelsize=self.colorbar_label.get())
 
     def module_plot(self):
-        self.canvas.get_tk_widget().destroy()   
+        self.canvas.get_tk_widget().destroy() 
+        self.toolbar.destroy()  
         if self.xFig.get() != 0 and self.yFig.get() != 0 :
             self.fig = Figure(figsize=(self.xFig.get(), self.yFig.get()))
         else:
@@ -310,6 +347,8 @@ class plot_save:
             self.colorbar_plot()
         elif self.num_cols == 3:
             self.d3_plot()
+        elif self.num_cols == 4:
+            self.scatter_plot()
 
         if self.num_cols != 3:
             if self.xLabel.get() != 0 and self.yLabel.get() != 0:
@@ -340,9 +379,9 @@ class plot_save:
                 y_width = (self.yUpper.get() - self.yLower.get())/self.tk_ybin.get()
                 x_level = np.arange(float(self.xLower.get()), float(self.xUpper.get()), float(x_width), dtype=float)
                 y_level = np.arange(float(self.yLower.get()), float(self.yUpper.get()), float(y_width), dtype=float)
-                self.ax.set_xticks(x_level, fontsize=self.tkFont.get())
-                self.ax.set_yticks(y_level, fontsize=self.tkFont.get())
-                self.ax.tick_params(axis='both', direction=str(self.xy_ticks.get()), length=self.tk_len.get())
+                self.ax.set_xticks(x_level)
+                self.ax.set_yticks(y_level)
+                self.ax.tick_params(axis='both', direction=str(self.xy_ticks.get()), length=self.tk_len.get(), labelsize=self.tkFont.get())
             elif self.xy_ticks.get() !=0 and self.tk_len.get() != 0:
                 mix_x_arr, mix_y_arr = [], []
                 for i in range(len(self.x_arr)):
@@ -354,9 +393,9 @@ class plot_save:
                 y_width = (np.max(mix_y_arr) - np.min(mix_y_arr))/self.tk_ybin.get()
                 x_level = np.arange(np.min(mix_x_arr), np.max(mix_x_arr), float(x_width), dtype=float)
                 y_level = np.arange(np.min(mix_y_arr), np.max(mix_y_arr), float(y_width), dtype=float)
-                self.ax.set_xticks(x_level, fontsize=self.tkFont.get())
-                self.ax.set_yticks(y_level, fontsize=self.tkFont.get())
-                self.ax.tick_params(axis='both', direction=str(self.xy_ticks.get()), length=self.tk_len.get())
+                self.ax.set_xticks(x_level)
+                self.ax.set_yticks(y_level)
+                self.ax.tick_params(axis='both', direction=str(self.xy_ticks.get()), length=self.tk_len.get(), labelsize=self.tkFont.get())
 
         if self.num_cols != 3 and self.num_cols == 1:
             if self.xy_ticks.get() !=0 and self.tk_len.get() != 0 and self.xLower.get() != 0 and self.xUpper.get() != 0 and self.yLower.get() != 0 and self.yUpper.get() != 0:
@@ -364,9 +403,9 @@ class plot_save:
                 y_width = (self.yUpper.get() - self.yLower.get())/self.tk_ybin.get()
                 x_level = np.arange(float(self.xLower.get()), float(self.xUpper.get()), float(x_width), dtype=float)
                 y_level = np.arange(float(self.yLower.get()), float(self.yUpper.get()), float(y_width), dtype=float)
-                self.ax.set_xticks(x_level, fontsize=self.tkFont.get())
-                self.ax.set_yticks(y_level, fontsize=self.tkFont.get())
-                self.ax.tick_params(axis='both', direction=str(self.xy_ticks.get()), length=self.tk_len.get())       
+                self.ax.set_xticks(x_level)
+                self.ax.set_yticks(y_level)
+                self.ax.tick_params(axis='both', direction=str(self.xy_ticks.get()), length=self.tk_len.get(), labelsize=self.tkFont.get())       
             elif self.xy_ticks.get() !=0 and self.tk_len.get() != 0 and self.xLower.get() == 0 and self.xUpper.get() == 0 and self.yLower.get() == 0 and self.yUpper.get() == 0:
                 mix_x_arr, mix_y_arr = [], []
                 for i in range(len(self.xx)):
@@ -380,7 +419,7 @@ class plot_save:
                 y_level = np.arange(np.min(mix_y_arr), np.max(mix_y_arr), float(y_width), dtype=float)
                 self.ax.set_xticks(x_level, fontsize=self.tkFont.get())
                 self.ax.set_yticks(y_level, fontsize=self.tkFont.get())
-                self.ax.tick_params(axis='both', direction=str(self.xy_ticks.get()), length=self.tk_len.get())
+                self.ax.tick_params(axis='both', direction=str(self.xy_ticks.get()), length=self.tk_len.get(), labelsize=self.tkFont.get())
 
         self.fig.tight_layout()
         disconnect_zoom = zoom_factory(self.ax)
@@ -393,42 +432,11 @@ class plot_save:
         self.toolbar = NavigationToolbar2Tk(self.canvas, window, pack_toolbar=True)
         self.toolbar.update()
 
-    def plot_scatter(self):
-        if self.xFig.get() != 0 and self.yFig.get() != 0 :
-            self.fig = plt.figure(figsize=(self.xFig.get(), self.yFig.get()))
-        else:
-            self.fig = plt.figure(figsize=(3, 3))
-        for i in range(len(self.x_arr)):
-            if self.legend_var_arr[i].get() != 0 and self.new_var_arr[i].get() != 0:
-                plt.scatter(self.x_arr[i], self.y_arr[i], c=self.new_var_arr[i].get(), label=self.legend_var_arr[i].get())
-                plt.legend(fontsize=self.lgdFont.get(), loc=str(self.lgdLoc.get()))
-            elif self.legend_var_arr[i].get() == 0 and self.new_var_arr[i].get() != 0:
-                plt.scatter(self.x_arr[i], self.y_arr[i], c=self.new_var_arr[i].get())
-            elif self.legend_var_arr[i].get() != 0 and self.new_var_arr[i].get() == 0:
-                plt.scatter(self.x_arr[i], self.y_arr[i], label=self.legend_var_arr[i].get())
-                plt.legend(fontsize=self.lgdFont.get(), loc=str(self.lgdLoc.get()))
-            else:
-                plt.scatter(self.x_arr[i], self.y_arr[i])
-        if self.xLabel.get() !=0 and self.yLabel.get() != 0:
-            plt.xlabel(self.xLabel.get(), fontsize=self.tkFont.get())
-            plt.ylabel(self.yLabel.get(), fontsize=self.tkFont.get())
-        if self.xLower.get() != 0 and self.xUpper.get() != 0:
-            plt.xlim(self.xLower.get(), self.xUpper.get())
-        if self.yLower.get() != 0 and self.yUpper.get() != 0:
-            plt.ylim(self.yLower.get(), self.yUpper.get())
-        if self.xy_ticks.get() !=0 and self.tk_len.get() != 0:
-            plt.xticks(fontsize=self.tkFont.get())
-            plt.yticks(fontsize=self.tkFont.get())
-            plt.locator_params(axis='x', nbins=self.tk_xbin.get())
-            plt.locator_params(axis='y', nbins=self.tk_ybin.get())
-            plt.tick_params(axis='both', direction=str(self.xy_ticks.get()), length=self.tk_len.get())
-        
-        plt.tight_layout()
-        self.canvas = FigureCanvasTkAgg(self.fig, master=window)  
-        self.canvas.draw()
-        self.canvas.get_tk_widget().pack(side=RIGHT, expand=1)
-
     def plot_file_labeling(self):
+        # Destroy the window
+        self.toolbar.destroy()
+        self.canvas.get_tk_widget().destroy()
+        # Get the entries
         x_label = str(self.xlabel.get())
         y_label = str(self.ylabel.get())
         self.xLabel.set(x_label)
@@ -454,6 +462,10 @@ class plot_save:
         self.font_opt.destroy()
 
     def plot_file_range(self):
+        # Destroy the window
+        self.toolbar.destroy()
+        self.canvas.get_tk_widget().destroy()
+        # Get the entries
         # Get the range of x and y
         x_range_lower = float(self.xrange_lower.get())
         x_range_upper = float(self.xrange_upper.get())
@@ -495,6 +507,10 @@ class plot_save:
             self.zlim_upper_opt.destroy()
 
     def plot_figsize(self):
+        # Destroy the window
+        self.toolbar.destroy()
+        self.canvas.get_tk_widget().destroy()
+        # Get the entries
         # Get the figsize 
         x_fig = int(self.xfig.get())
         y_fig = int(self.yfig.get())
@@ -509,6 +525,10 @@ class plot_save:
         self.yfig.destroy()
 
     def plot_xyticks(self):
+        # Destroy the window
+        self.toolbar.destroy()
+        self.canvas.get_tk_widget().destroy()
+        # Get the entries
         # Get the ticks info
         self.xy_ticks.set(str(self.xy.get()))
         self.tk_len.set(int(self.xyticks_len.get()))
@@ -534,6 +554,10 @@ class plot_save:
         self.ybin.destroy()
 
     def plot_color(self):
+        # Destroy the window
+        self.toolbar.destroy()
+        self.canvas.get_tk_widget().destroy()
+        # Get the entries
         self.new_var_arr = []
         for i in range(len(self.x_arr)):
             new_var = 'entry_' + str(i)
@@ -549,6 +573,10 @@ class plot_save:
             self.variables_arr[i].destroy()
 
     def plot_legend(self):
+        # Destroy the window
+        self.toolbar.destroy()
+        self.canvas.get_tk_widget().destroy()
+        # Get the entries
         self.legend_var_arr = []
         for i in range(len(self.x_arr)):
             legend_var = 'entry_' + str(i)
@@ -568,16 +596,7 @@ class plot_save:
         self.legend_location.destroy()
         self.lgd_loc.destroy()
 
-    def scatter_plot(self):   
-        # Destroy the window
-        self.canvas.get_tk_widget().destroy()
-        # Plot
-        self.plot_scatter()
-
-    def set_xylabel(self):
-        # Destroy the window
-        self.toolbar.destroy()
-        self.canvas.get_tk_widget().destroy()   
+    def set_xylabel(self):   
         self.xlbl = Label(window, text="x-label", bg="white")
         self.xlabel = Entry(window, width=7)
         self.xlbl_opt = Label(window, text="(Str)", bg="white")
@@ -610,9 +629,6 @@ class plot_save:
         btn_replot.place(x=72, y=5)
 
     def set_xyrange(self):
-        # Destroy the window
-        self.canvas.get_tk_widget().destroy() 
-        self.toolbar.destroy()
         # Entries  
         self.xlim_lower = Label(window, text="xlim-L", bg="white")
         self.xlim_upper = Label(window, text="xlim-U", bg="white")
@@ -657,9 +673,6 @@ class plot_save:
         btn_replot.place(x=72, y=5)
 
     def set_figsize(self):
-        # Destroy the window
-        self.canvas.get_tk_widget().destroy()
-        self.toolbar.destroy()
         # Entries
         self.xyfig = Label(window, text="Fig dim", bg="white")
         self.xfig = Entry(window, width=3)
@@ -680,9 +693,6 @@ class plot_save:
 
     def set_xyticks(self):
         if self.num_cols != 3:
-            # Destroy the window
-            self.canvas.get_tk_widget().destroy()
-            self.toolbar.destroy()
             v0=IntVar()
             v0.set(1)
             self.xyticks_label = Label(window, text="xy-ticks", bg="white")
@@ -719,9 +729,6 @@ class plot_save:
 
     def set_color(self):
         if self.num_cols != 1:
-            # Destroy the window
-            self.canvas.get_tk_widget().destroy()
-            self.toolbar.destroy()
             # Set butoon and entries
             self.color_lbl = Label(window, text="Set color", bg="white")
             j = 0
@@ -742,9 +749,6 @@ class plot_save:
             btn_replot.place(x=72, y=5)
 
     def set_legend(self):
-        # Destroy the window
-        self.canvas.get_tk_widget().destroy()
-        self.toolbar.destroy()
         # Set butoon and entries
         self.legend_lbl = Label(window, text="Set legend", bg="white")
         self.legend_arr = []
@@ -855,7 +859,7 @@ btn_upload = Button(window, text="Upload", height=1, width=4, command=lambda: ps
 btn_upload.place(x=5, y=5)
 btn_plot = Button(window, text="Line plot", height=1, width=5, command=lambda: ps.plot_file())
 btn_plot.place(x=72, y=5)
-btn_set_xyscatter = Button(window, text="Scatter plot", height=1, width=7, command=lambda: ps.scatter_plot())
+btn_set_xyscatter = Button(window, text="Scatter plot", height=1, width=7, command=lambda: ps.scatter_file())
 btn_set_xyscatter.place(x=145, y=5)
 btn_hist = Button(window, text="Histogram plot", height=1, width=10, command=lambda: ps.set_hist())
 btn_hist.place(x=235, y=5)
