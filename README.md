@@ -8,6 +8,7 @@ A Python based interactive plotting software
 1. [python3.7 or higher](https://www.python.org/download/releases/3.0/)
 2. [Pillow](https://pypi.org/project/Pillow/)
 3. [mpl_interactions](https://pypi.org/project/mpl-interactions/)
+4. [Ipython](https://ipython.org/)
 
 #### Using source code
 ```bash
