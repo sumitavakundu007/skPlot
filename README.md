@@ -17,7 +17,12 @@ A Python based interactive plotting software
 git clone https://github.com/sumitavakundu007/skPlot.git
 tar -xvf skPlot-X.X.X
 cd skPlot-X.X.X
-python3 setup.py install --user
+```
+
+## Install the prerequisites
+
+```bash
+pip3.X install numpy matplotlib tk Ipython mpl_interactions Pillow
 ```
 
 ## Usage
