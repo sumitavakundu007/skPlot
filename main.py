@@ -72,8 +72,21 @@ class plot_save:
         self.legend_var_arr = [IntVar() for i in range(len(self.filePaths))]
         self.lgdFont = IntVar()
         self.lgdLoc = StringVar()
+        self.marker_var_arr = [IntVar() for i in range(len(self.filePaths))]
+        self.marker_size_var_arr = [IntVar() for i in range(len(self.filePaths))]
+        self.linewidth_var_arr = [IntVar() for i in range(len(self.filePaths))]
+
+        self.fig = Figure(figsize=(3, 3))
+        self.canvas = FigureCanvasTkAgg(self.fig, master=window)  
+        self.canvas.draw()
+        self.canvas.get_tk_widget().pack(side=TOP, expand=1)
+        self.toolbar = NavigationToolbar2Tk(self.canvas, window, pack_toolbar=True)
+        self.toolbar.update()
 
     def plot_file(self):
+        # Destroy the window
+        self.toolbar.destroy()
+        self.canvas.get_tk_widget().destroy()
         self.num_cols = 2
         self.x_arr, self.y_arr = [], []
         for i in self.filePaths:
@@ -95,6 +108,9 @@ class plot_save:
         self.toolbar.update()
 
     def scatter_file(self):
+        # Destroy the window
+        self.toolbar.destroy()
+        self.canvas.get_tk_widget().destroy()
         self.num_cols = 4
         self.x_arr, self.y_arr = [], []
         for i in self.filePaths:
@@ -115,7 +131,34 @@ class plot_save:
         self.toolbar = NavigationToolbar2Tk(self.canvas, window, pack_toolbar=True)
         self.toolbar.update()
 
+    def lp_file(self):
+        # Destroy the window
+        self.toolbar.destroy()
+        self.canvas.get_tk_widget().destroy()
+        self.num_cols = 5
+        self.x_arr, self.y_arr = [], []
+        for i in self.filePaths:
+            self.x_arr.append(np.loadtxt(i)[:, 0])
+            self.y_arr.append(np.loadtxt(i)[:, 1])
+        self.fig = Figure(figsize=(3, 3))
+        self.ax = self.fig.add_subplot()
+        for i in range(len(self.x_arr)):
+            self.ax.plot(self.x_arr[i], self.y_arr[i], '-o')
+        self.fig.tight_layout()
+        disconnect_zoom = zoom_factory(self.ax)
+        display(self.fig.canvas)
+        pan_handler = panhandler(self.fig)
+        display(self.fig.canvas)
+        self.canvas = FigureCanvasTkAgg(self.fig, master=window)  
+        self.canvas.draw()
+        self.canvas.get_tk_widget().pack(side=TOP, expand=1)
+        self.toolbar = NavigationToolbar2Tk(self.canvas, window, pack_toolbar=True)
+        self.toolbar.update()
+
     def plot3d(self):
+        # Destroy the window
+        self.toolbar.destroy()
+        self.canvas.get_tk_widget().destroy()
         self.num_cols = 3
         self.x_arr, self.y_arr, self.z_arr = [], [], []
         for i in self.filePaths:
@@ -138,6 +181,9 @@ class plot_save:
         self.toolbar.update()
 
     def hist_file(self):
+        # Destroy the window
+        self.toolbar.destroy()
+        self.canvas.get_tk_widget().destroy()
         self.num_cols = 1
         self.bin_var.set(int(self.bin_entry.get()))
         self.range_var_low.set(int(self.range_entry_low.get()))
@@ -299,6 +345,30 @@ class plot_save:
                 else:
                     self.ax.scatter(self.x_arr[i], self.y_arr[i])
 
+    def lp_plot(self):
+        self.ax = self.fig.add_subplot()
+        if len(self.x_arr) == len(self.y_arr):
+            for i in range(len(self.x_arr)):
+                if self.legend_var_arr[i].get() != 0 and self.new_var_arr[i].get() != 0 and self.marker_var_arr[i].get() != 0 and self.marker_size_var_arr[i].get() != 0 and self.linewidth_var_arr[i].get() != 0:
+                    self.ax.plot(self.x_arr[i], self.y_arr[i], c=self.new_var_arr[i].get(), marker=self.marker_var_arr[i].get(), markersize=self.marker_size_var_arr[i].get(), linewidth=self.linewidth_var_arr[i].get(), label=self.legend_var_arr[i].get())
+                    self.ax.legend(fontsize=self.lgdFont.get(), loc=str(self.lgdLoc.get()))
+                elif self.legend_var_arr[i].get() == 0 and self.new_var_arr[i].get() != 0 and self.marker_var_arr[i].get() != 0 and self.marker_size_var_arr[i].get() != 0 and self.linewidth_var_arr[i].get() != 0:
+                    self.ax.plot(self.x_arr[i], self.y_arr[i], c=self.new_var_arr[i].get(), marker=self.marker_var_arr[i].get(), markersize=self.marker_size_var_arr[i].get(), linewidth=self.linewidth_var_arr[i].get())
+                elif self.legend_var_arr[i].get() != 0 and self.new_var_arr[i].get() == 0 and self.marker_var_arr[i].get() != 0 and self.marker_size_var_arr[i].get() != 0 and self.linewidth_var_arr[i].get() != 0:
+                    self.ax.plot(self.x_arr[i], self.y_arr[i], marker=self.marker_var_arr[i].get(), markersize=self.marker_size_var_arr[i].get(), linewidth=self.linewidth_var_arr[i].get(), label=self.legend_var_arr[i].get())
+                elif self.legend_var_arr[i].get() == 0 and self.new_var_arr[i].get() == 0 and self.marker_var_arr[i].get() != 0 and self.marker_size_var_arr[i].get() != 0 and self.linewidth_var_arr[i].get() != 0:
+                    self.ax.plot(self.x_arr[i], self.y_arr[i], marker=self.marker_var_arr[i].get(), markersize=self.marker_size_var_arr[i].get(), linewidth=self.linewidth_var_arr[i].get())
+                elif self.legend_var_arr[i].get() != 0 and self.new_var_arr[i].get() != 0 and self.marker_var_arr[i].get() == 0 and self.marker_size_var_arr[i].get() == 0 and self.linewidth_var_arr[i].get() == 0:
+                    self.ax.plot(self.x_arr[i], self.y_arr[i], c=self.new_var_arr[i].get(), marker='o', markersize=5, label=self.legend_var_arr[i].get())
+                    self.ax.legend(fontsize=self.lgdFont.get(), loc=str(self.lgdLoc.get()))
+                elif self.legend_var_arr[i].get() == 0 and self.new_var_arr[i].get() != 0 and self.marker_var_arr[i].get() == 0 and self.marker_size_var_arr[i].get() == 0 and self.linewidth_var_arr[i].get() == 0:
+                    self.ax.plot(self.x_arr[i], self.y_arr[i], c=self.new_var_arr[i].get(), marker='o', markersize=5)
+                elif self.legend_var_arr[i].get() != 0 and self.new_var_arr[i].get() == 0 and self.marker_var_arr[i].get() == 0 and self.marker_size_var_arr[i].get() == 0 and self.linewidth_var_arr[i].get() == 0:
+                    self.ax.plot(self.x_arr[i], self.y_arr[i], marker='o', markersize=5, label=self.legend_var_arr[i].get())
+                    self.ax.legend(fontsize=self.lgdFont.get(), loc=str(self.lgdLoc.get()))
+                else:
+                    self.ax.plot(self.x_arr[i], self.y_arr[i], '-o')
+
     def hist_plot(self):
         self.ax = self.fig.add_subplot()
         self.xx, self.yy = [], []
@@ -349,6 +419,8 @@ class plot_save:
             self.d3_plot()
         elif self.num_cols == 4:
             self.scatter_plot()
+        elif self.num_cols == 5:
+            self.lp_plot()
 
         if self.num_cols != 3:
             if self.xLabel.get() != 0 and self.yLabel.get() != 0:
@@ -571,7 +643,7 @@ class plot_save:
         self.canvas.get_tk_widget().destroy()
         # Get the entries
         self.new_var_arr = []
-        for i in range(len(self.x_arr)):
+        for i in range(len(self.filePaths)):
             new_var = 'entry_' + str(i)
             self.new_var = StringVar()
             self.new_var.set(str(self.variables_arr[i].get()))
@@ -608,6 +680,37 @@ class plot_save:
         self.legend_location.destroy()
         self.lgd_loc.destroy()
 
+    def plot_lp(self):
+        # Destroy the window
+        self.toolbar.destroy()
+        self.canvas.get_tk_widget().destroy()
+        # Get the entries
+        self.marker_var_arr, self.marker_size_var_arr, self.linewidth_var_arr = [], [], []
+        for i in range(len(self.filePaths)):
+            marker_var = 'marker' + str(i)
+            marker_size_var = 'marker_size' + str(i)
+            linewidth_var = 'linewidth' + str(i)
+            self.marker_var = StringVar()
+            self.marker_size_var = IntVar()
+            self.linewidth_var = IntVar()
+            self.marker_var.set(str(self.marker_variable_arr[i].get()))
+            self.marker_size_var.set(int(self.marker_size_variable_arr[i].get()))
+            self.linewidth_var.set(int(self.linewidth_variable_arr[i].get()))
+            self.marker_var_arr.append(self.marker_var)
+            self.marker_size_var_arr.append(self.marker_size_var)
+            self.linewidth_var_arr.append(self.linewidth_var)
+
+        # Plot
+        self.module_plot()
+        # Destroy all entries
+        self.marker_lbl.destroy()
+        self.marker_size_lbl.destroy()
+        self.linewidth_lbl.destroy()
+        for i in range(len(self.filePaths)):
+            self.marker_variable_arr[i].destroy()
+            self.marker_size_variable_arr[i].destroy()
+            self.linewidth_variable_arr[i].destroy()
+
     def set_xylabel(self):   
         self.xlbl = Label(window, text="x-label", bg="white")
         self.xlabel = Entry(window, width=7)
@@ -638,6 +741,33 @@ class plot_save:
         self.font_opt = Label(window, text="(Int)", bg="white")
         self.font_opt.place(x=130, y=410+j)
         btn_replot = Button(window, text="Replot", height=1, width=5, command=lambda: self.plot_file_labeling())
+        btn_replot.place(x=72, y=5)
+
+    def set_lp(self):
+        self.marker_lbl = Label(window, text="Marker", bg="white")
+        self.marker_size_lbl = Label(window, text="Marker size", bg="white")
+        self.linewidth_lbl = Label(window, text="Linewidth", bg="white")
+        self.marker_lbl.place(x=5, y=380)
+        self.marker_size_lbl.place(x=5, y=410)
+        self.linewidth_lbl.place(x=5, y=440)
+        j = 0
+        self.marker_variable_arr, self.marker_size_variable_arr, self.linewidth_variable_arr =[], [], []
+        for i in range(len(self.filePaths)):
+            marker_variable = 'marker' + str(i)
+            marker_size_variable = 'marker_size' + str(i)
+            linewidth_variable = 'linewidth' + str(i)
+            self.marker_variable = Entry(window, width=3)
+            self.marker_size_variable = Entry(window, width=3)
+            self.linewidth_variable = Entry(window, width=3)
+            self.marker_variable.place(x=80+j, y=380)
+            self.marker_size_variable.place(x=100+j, y=410)
+            self.linewidth_variable.place(x=90+j, y=440)
+            self.marker_variable_arr.append(self.marker_variable)
+            self.marker_size_variable_arr.append(self.marker_size_variable)
+            self.linewidth_variable_arr.append(self.linewidth_variable)
+            j = j+50
+
+        btn_replot = Button(window, text="Replot", height=1, width=5, command=lambda: self.plot_lp())
         btn_replot.place(x=72, y=5)
 
     def set_xyrange(self):
@@ -839,9 +969,6 @@ class plot_save:
         btn_replot.place(x=72, y=5)
 
     def set_back(self):
-        # Destroy the window
-        self.canvas.get_tk_widget().destroy()
-        self.toolbar.destroy()
         if self.num_cols == 2:
             self.plot_file()
         elif self.num_cols == 1:
@@ -871,16 +998,19 @@ btn_upload = Button(window, text="Upload", height=1, width=4, command=lambda: ps
 btn_upload.place(x=5, y=5)
 btn_plot = Button(window, text="Line plot", height=1, width=5, command=lambda: ps.plot_file())
 btn_plot.place(x=72, y=5)
+btn_lp = Button(window, text="Line-point", height=1, width=7, command=lambda: ps.lp_file())
+btn_lp.place(x=145, y=5)
 btn_set_xyscatter = Button(window, text="Scatter plot", height=1, width=7, command=lambda: ps.scatter_file())
-btn_set_xyscatter.place(x=145, y=5)
+btn_set_xyscatter.place(x=235, y=5)
 btn_hist = Button(window, text="Histogram plot", height=1, width=10, command=lambda: ps.set_hist())
-btn_hist.place(x=235, y=5)
+btn_hist.place(x=325, y=5)
 btn_colorbar = Button(window, text="Color z-axis", height=1, width=7, command=lambda: ps.set_colorbar())
-btn_colorbar.place(x=350, y=5)
+btn_colorbar.place(x=440, y=5)
 btn_3dplot = Button(window, text="3D plot", height=1, width=5, command=lambda: ps.plot3d())
-btn_3dplot.place(x=440, y=5)
+btn_3dplot.place(x=530, y=5)
 btn_save = Button(window, text="Save", height=1, width=3, command=lambda: ps.save_fig())
-btn_save.place(x=515, y=5)
+btn_save.place(x=605, y=5)
+
 btn_set_xylabel = Button(window, text="Set label", height=1, width=7, command=lambda: ps.set_xylabel())
 btn_set_xylabel.place(x=5, y=40)
 btn_set_xyrange = Button(window, text="Set range", height=1, width=7, command=lambda: ps.set_xyrange())
@@ -893,13 +1023,16 @@ btn_set_xycolor = Button(window, text="Set color", height=1, width=5, command=la
 btn_set_xycolor.place(x=365, y=40)
 btn_set_xylegend = Button(window, text="Set legend", height=1, width=7, command=lambda: ps.set_legend())
 btn_set_xylegend.place(x=440, y=40)
-input_lbl = Label(window, text="Input section", bg="white")
-input_lbl.place(x=5, y=350)
+btn_set_marker = Button(window, text="Set marker", height=1, width=7, command=lambda: ps.set_lp())
+btn_set_marker.place(x=530, y=40)
+input_lbl = Label(window, text="Input section", font=('Arial', 15), bg="white")
+input_lbl.place(x=5, y=300)
 
 exit_button = Button(window, text="Exit", width=3, command=lambda: window.destroy)
 exit_button.place(x=330, y=500)
 back_button = Button(window, text="Back", width=3, command=lambda: ps.set_back())
 back_button.place(x=390, y=500)
+
 # run the gui
 window.mainloop()
 
