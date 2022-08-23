@@ -9,6 +9,7 @@ A Python based interactive plotting software
 2. [Pillow](https://pypi.org/project/Pillow/)
 3. [mpl_interactions](https://pypi.org/project/mpl-interactions/)
 4. [Ipython](https://ipython.org/)
+5. [Tkinter](https://docs.python.org/3/library/tkinter.html)
 
 #### Using source code
 ```bash
