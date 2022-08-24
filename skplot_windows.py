@@ -101,6 +101,7 @@ class plot_save:
             self.toolbar.destroy()
             self.canvas.get_tk_widget().destroy()
             self.num_cols = 2
+            self.x_arr, self.y_arr = [], []
             for i in self.filePaths:
                 self.x_arr.append(np.loadtxt(i)[:, 0])
                 self.y_arr.append(np.loadtxt(i)[:, 1])
@@ -120,6 +121,9 @@ class plot_save:
             self.toolbar.update()
         else:
             error_box = messagebox.showerror("Error", "Click Upload button to upload files")
+
+    def back_to_plot_file(self):
+        self.plot_file()
 
     def scatter_file(self):
         if len(self.filePaths) >= 1:
@@ -148,6 +152,9 @@ class plot_save:
         else:
             error_box = messagebox.showerror("Error", "Click Upload button to upload files")
 
+    def back_to_scatter_file(self):
+        self.scatter_file()
+
     def lp_file(self):
         if len(self.filePaths) >= 1:
             # Destroy the window
@@ -174,6 +181,9 @@ class plot_save:
             self.toolbar.update()
         else:
             error_box = messagebox.showerror("Error", "Click Upload button to upload files")
+
+    def back_to_lp_file(self):
+        self.lp_file()
 
     def plot3d(self):
         if len(self.filePaths) >= 1:
@@ -202,6 +212,9 @@ class plot_save:
             self.toolbar.update()
         else:
             error_box = messagebox.showerror("Error", "Click Upload button to upload files")
+
+    def back_to_plot3d_file(self):
+        self.plot3d()
 
     def hist_file(self):
         if len(self.filePaths) >= 1:
@@ -247,6 +260,8 @@ class plot_save:
             error_box = messagebox.showerror("Error", "Click Upload button to upload files")
 
     def back_to_hist_file(self):
+        self.canvas.get_tk_widget().destroy() 
+        self.toolbar.destroy() 
         self.x_arr = []
         for i in self.filePaths:
             self.x_arr.append(np.loadtxt(i)[:, 0])
@@ -311,6 +326,8 @@ class plot_save:
             error_box = messagebox.showerror("Error", "Click Upload button to upload files")
 
     def back_to_colorbar_file(self):
+        self.canvas.get_tk_widget().destroy() 
+        self.toolbar.destroy() 
         self.x_arr, self.y_arr, self.z_arr = [], [], []
         for i in self.filePaths:
             self.x_arr.append(np.loadtxt(i)[:, 0])
@@ -445,7 +462,6 @@ class plot_save:
             self.fig = Figure(figsize=(self.xFig.get(), self.yFig.get()))
         else:
             self.fig = Figure(figsize=(3, 3))
-        # Line plot
         if self.num_cols == 1:
             self.hist_plot()
         elif self.num_cols == 2:
@@ -911,7 +927,7 @@ class plot_save:
 
     def set_xylabel(self):
         if len(self.filePaths) >= 1:
-            if len(self.x_arr) > 0 and len(self.y_arr) > 0:
+            if len(self.x_arr) > 0:
                 self.xlbl = Label(window, text="x-label", bg="white")
                 self.xlabel = Entry(window, width=7)
                 self.xlbl_opt = Label(window, text="(Str)", bg="white")
@@ -948,41 +964,44 @@ class plot_save:
             error_box = messagebox.showerror("Instructions", "Please upload any file")
 
     def set_lp(self):
-        if len(self.filePaths) >= 1:
-            if len(self.x_arr) > 0 and len(self.y_arr) > 0:
-                self.marker_lbl = Label(window, text="Marker", bg="white")
-                self.marker_size_lbl = Label(window, text="Marker size", bg="white")
-                self.linewidth_lbl = Label(window, text="Linewidth", bg="white")
-                self.marker_lbl.place(x=5, y=380)
-                self.marker_size_lbl.place(x=5, y=410)
-                self.linewidth_lbl.place(x=5, y=440)
-                j = 0
-                self.marker_variable_arr, self.marker_size_variable_arr, self.linewidth_variable_arr =[], [], []
-                for i in range(len(self.filePaths)):
-                    marker_variable = 'marker' + str(i)
-                    marker_size_variable = 'marker_size' + str(i)
-                    linewidth_variable = 'linewidth' + str(i)
-                    self.marker_variable = Entry(window, width=3)
-                    self.marker_size_variable = Entry(window, width=3)
-                    self.linewidth_variable = Entry(window, width=3)
-                    self.marker_variable.place(x=80+j, y=380)
-                    self.marker_size_variable.place(x=100+j, y=410)
-                    self.linewidth_variable.place(x=90+j, y=440)
-                    self.marker_variable_arr.append(self.marker_variable)
-                    self.marker_size_variable_arr.append(self.marker_size_variable)
-                    self.linewidth_variable_arr.append(self.linewidth_variable)
-                    j = j+50
+        if self.num_cols == 5:
+            if len(self.filePaths) >= 1:
+                if len(self.x_arr) > 0:
+                    self.marker_lbl = Label(window, text="Marker", bg="white")
+                    self.marker_size_lbl = Label(window, text="Marker size", bg="white")
+                    self.linewidth_lbl = Label(window, text="Linewidth", bg="white")
+                    self.marker_lbl.place(x=5, y=380)
+                    self.marker_size_lbl.place(x=5, y=410)
+                    self.linewidth_lbl.place(x=5, y=440)
+                    j = 0
+                    self.marker_variable_arr, self.marker_size_variable_arr, self.linewidth_variable_arr =[], [], []
+                    for i in range(len(self.filePaths)):
+                        marker_variable = 'marker' + str(i)
+                        marker_size_variable = 'marker_size' + str(i)
+                        linewidth_variable = 'linewidth' + str(i)
+                        self.marker_variable = Entry(window, width=3)
+                        self.marker_size_variable = Entry(window, width=3)
+                        self.linewidth_variable = Entry(window, width=3)
+                        self.marker_variable.place(x=80+j, y=380)
+                        self.marker_size_variable.place(x=100+j, y=410)
+                        self.linewidth_variable.place(x=90+j, y=440)
+                        self.marker_variable_arr.append(self.marker_variable)
+                        self.marker_size_variable_arr.append(self.marker_size_variable)
+                        self.linewidth_variable_arr.append(self.linewidth_variable)
+                        j = j+50
 
-                btn_replot = Button(window, text="Replot", height=1, width=5, command=lambda: self.plot_lp())
-                btn_replot.place(x=72, y=5)
+                    btn_replot = Button(window, text="Replot", height=1, width=5, command=lambda: self.plot_lp())
+                    btn_replot.place(x=72, y=5)
+                else:
+                    error_box = messagebox.showerror("Instructions", "Please do any kind of plot")
             else:
-                error_box = messagebox.showerror("Instructions", "Please do any kind of plot")
+                error_box = messagebox.showerror("Instructions", "Please upload any file")
         else:
-            error_box = messagebox.showerror("Instructions", "Please upload any file")
+            messagebox.showerror("Instructions", "You can't set marker")
 
     def set_xyrange(self):
         if len(self.filePaths) >= 1:
-            if len(self.x_arr) > 0 and len(self.y_arr) > 0:
+            if len(self.x_arr) > 0:
                 # Entries  
                 self.xlim_lower = Label(window, text="xlim-L", bg="white")
                 self.xlim_upper = Label(window, text="xlim-U", bg="white")
@@ -1032,7 +1051,7 @@ class plot_save:
 
     def set_figsize(self):
         if len(self.filePaths) >= 1:
-            if len(self.x_arr) > 0 and len(self.y_arr) > 0:
+            if len(self.x_arr) > 0:
                 # Entries
                 self.xyfig = Label(window, text="Fig dim", bg="white")
                 self.xyfig_opt = Label(window, text="(Int/Double)", bg="white")
@@ -1059,7 +1078,7 @@ class plot_save:
 
     def set_xyticks(self):
         if len(self.filePaths) >= 1:
-            if len(self.x_arr) > 0 and len(self.y_arr) > 0:
+            if len(self.x_arr) > 0:
                 if self.num_cols != 3:
                     v0=IntVar()
                     v0.set(1)
@@ -1109,7 +1128,7 @@ class plot_save:
 
     def set_color(self):
         if len(self.filePaths) >= 1:
-            if len(self.x_arr) > 0 and len(self.y_arr) > 0:
+            if len(self.x_arr) > 0:
                 # Set butoon and entries
                 self.color_lbl = Label(window, text="Set color", bg="white")
                 j = 0
@@ -1134,7 +1153,7 @@ class plot_save:
 
     def set_legend(self):
         if len(self.filePaths) >= 1:
-            if len(self.x_arr) > 0 and len(self.y_arr) > 0:
+            if len(self.x_arr) > 0:
                 # Set butoon and entries
                 self.legend_lbl = Label(window, text="Set legend", bg="white")
                 self.legend_arr = []
@@ -1225,13 +1244,17 @@ class plot_save:
 
     def set_back(self):
         if self.num_cols == 2:
-            self.plot_file()
+            self.back_to_plot_file()
         elif self.num_cols == 1:
             self.back_to_hist_file()
         elif self.num_cols == 2.5:
             self.back_to_colorbar_file()
         elif self.num_cols == 3:
-            self.plot3d()
+            self.back_to_plot3d()
+        elif self.num_cols == 5:
+            self.back_to_lp_file()
+        elif self.num_cols == 4:
+            self.back_to_scatter_file()
 
     def save_fig(self):
         out_filename = filedialog.asksaveasfile(mode='w', defaultextension=".png")
