@@ -24,10 +24,15 @@ cd skPlot
 pip3.X install numpy matplotlib tk Ipython mpl_interactions Pillow
 ```
 
-## Usage
+## Usage (Linux)
 
 ```bash
 python3.X skplot_linux.py
+```
+## Usage (Windows)
+
+```bash
+python3.X skplot_windows.py
 ```
 
 ## Contributing
