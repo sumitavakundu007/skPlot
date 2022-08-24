@@ -15,7 +15,6 @@ A Python based interactive plotting software
 #### Using source code
 ```bash
 git clone https://github.com/sumitavakundu007/skPlot.git
-tar -xvf skPlot-X.X.X
 cd skPlot-X.X.X
 ```
 
