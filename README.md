@@ -15,7 +15,7 @@ A Python based interactive plotting software
 #### Using source code
 ```bash
 git clone https://github.com/sumitavakundu007/skPlot.git
-cd skPlot-X.X.X
+cd skPlot
 ```
 
 ## Install the prerequisites
@@ -27,7 +27,7 @@ pip3.X install numpy matplotlib tk Ipython mpl_interactions Pillow
 ## Usage
 
 ```bash
-python3.X main.py
+python3.X skplot_linux.py
 ```
 
 ## Contributing
