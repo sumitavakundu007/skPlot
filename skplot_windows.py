@@ -956,7 +956,7 @@ class plot_save:
                 self.xyticks_font.place(x=70, y=410+j)
                 self.font_opt = Label(window, text="(Int)", bg="white")
                 self.font_opt.place(x=130, y=410+j)
-                btn_replot = Button(window, text="Replot", height=1, width=5, command=lambda: self.plot_file_labeling())
+                btn_replot = Button(window, text="Replot", height=1, width=8, command=lambda: self.plot_file_labeling())
                 btn_replot.place(x=72, y=5)
             else:
                 error_box = messagebox.showerror("Instructions", "Please do any kind of plot")
@@ -990,7 +990,7 @@ class plot_save:
                         self.linewidth_variable_arr.append(self.linewidth_variable)
                         j = j+50
 
-                    btn_replot = Button(window, text="Replot", height=1, width=5, command=lambda: self.plot_lp())
+                    btn_replot = Button(window, text="Replot", height=1, width=8, command=lambda: self.plot_lp())
                     btn_replot.place(x=72, y=5)
                 else:
                     error_box = messagebox.showerror("Instructions", "Please do any kind of plot")
@@ -1042,7 +1042,7 @@ class plot_save:
                     self.zlim_lower_opt.place(x=130, y=470+j)
                     self.zlim_upper_opt.place(x=130, y=470+2*j)
 
-                btn_replot = Button(window, text="Replot", height=1, width=5, command=lambda: self.plot_file_range())
+                btn_replot = Button(window, text="Replot", height=1, width=8, command=lambda: self.plot_file_range())
                 btn_replot.place(x=72, y=5)
             else:
                 error_box = messagebox.showerror("Instructions", "Please do any kind of plot")
@@ -1116,10 +1116,10 @@ class plot_save:
                     j = 30
 
                     # Replot button
-                    btn_replot = Button(window, text="Replot", height=1, width=5, command=lambda: self.plot_xyticks())
+                    btn_replot = Button(window, text="Replot", height=1, width=8, command=lambda: self.plot_xyticks())
                     btn_replot.place(x=72, y=5)
                 else:
-                    btn_replot = Button(window, text="Replot", height=1, width=5)
+                    btn_replot = Button(window, text="Replot", height=1, width=8)
                     btn_replot.place(x=72, y=5)
             else:
                 error_box = messagebox.showerror("Instructions", "Please do any kind of plot")
@@ -1144,7 +1144,7 @@ class plot_save:
                 self.color_opt = Label(window, text="(String)", bg="white")
                 self.color_opt.place(x=5, y=410+j)
                 # Replot button
-                btn_replot = Button(window, text="Replot", height=1, width=5, command=lambda: self.plot_color())
+                btn_replot = Button(window, text="Replot", height=1, width=8, command=lambda: self.plot_color())
                 btn_replot.place(x=72, y=5)
             else:
                 error_box = messagebox.showerror("Instructions", "Please do any kind of plot")
@@ -1175,7 +1175,7 @@ class plot_save:
                 self.lgd_loc = Entry(window, width=5)
                 self.lgd_loc.place(x=70, y=410+j+30)
                 # Replot button
-                btn_replot = Button(window, text="Replot", height=1, width=5, command=lambda: self.plot_legend())
+                btn_replot = Button(window, text="Replot", height=1, width=8, command=lambda: self.plot_legend())
                 btn_replot.place(x=72, y=5)
             else:
                 error_box = messagebox.showerror("Instructions", "Please do any kind of plot")
@@ -1209,7 +1209,7 @@ class plot_save:
             self.width_entry.place(x=90, y=500)
             self.color_entry.place(x=90, y=540)
             # Replot button
-            btn_replot = Button(window, text="Replot", height=1, width=5, command=lambda: self.hist_file())
+            btn_replot = Button(window, text="Replot", height=1, width=8, command=lambda: self.hist_file())
             btn_replot.place(x=72, y=5)
         else:
             error_box = messagebox.showerror("Instructions", "Please do any kind of plot")
@@ -1237,7 +1237,7 @@ class plot_save:
             self.colorbar_label_lbl.place(x=5, y=500)
             self.colorbar_label_entry.place(x=100, y=500)
             # Replot button
-            btn_replot = Button(window, text="Replot", height=1, width=5, command=lambda: self.colorbar_file())
+            btn_replot = Button(window, text="Replot", height=1, width=8, command=lambda: self.colorbar_file())
             btn_replot.place(x=72, y=5)
         else:
             error_box = messagebox.showerror("Instructions", "Click Upload button to upload files")
