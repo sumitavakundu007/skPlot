@@ -97,122 +97,134 @@ class plot_save:
         plot_msgbox = messagebox.showinfo("Instructions", "Click \"Line plot\", \"Line-point\", \"Histogram plot\", \"3D plot\", \"Color z-axis\", or \"Scatter plot\" to plot the files ")
 
     def plot_file(self):
-        if len(self.filePaths) >= 1:
-            # Destroy the window
-            self.toolbar.destroy()
-            self.canvas.get_tk_widget().destroy()
-            self.num_cols = 2
-            self.x_arr, self.y_arr = [], []
-            for i in self.filePaths:
-                self.x_arr.append(np.loadtxt(i)[:, 0])
-                self.y_arr.append(np.loadtxt(i)[:, 1])
-            self.fig = Figure(figsize=(3, 3))
-            self.ax = self.fig.add_subplot()
-            for i in range(len(self.x_arr)):
-                self.ax.plot(self.x_arr[i], self.y_arr[i])
-            self.fig.tight_layout()
-            disconnect_zoom = zoom_factory(self.ax)
-            display(self.fig.canvas)
-            pan_handler = panhandler(self.fig)
-            display(self.fig.canvas)
-            self.canvas = FigureCanvasTkAgg(self.fig, master=window)  
-            self.canvas.draw()
-            self.canvas.get_tk_widget().pack(side=TOP, expand=1)
-            self.toolbar = NavigationToolbar2Tk(self.canvas, window, pack_toolbar=True)
-            self.toolbar.update()
+        if self.num_cols == 0:
+            if len(self.filePaths) >= 1:
+                # Destroy the window
+                self.toolbar.destroy()
+                self.canvas.get_tk_widget().destroy()
+                self.num_cols = 2
+                self.x_arr, self.y_arr = [], []
+                for i in self.filePaths:
+                    self.x_arr.append(np.loadtxt(i)[:, 0])
+                    self.y_arr.append(np.loadtxt(i)[:, 1])
+                self.fig = Figure(figsize=(3, 3))
+                self.ax = self.fig.add_subplot()
+                for i in range(len(self.x_arr)):
+                    self.ax.plot(self.x_arr[i], self.y_arr[i])
+                self.fig.tight_layout()
+                disconnect_zoom = zoom_factory(self.ax)
+                display(self.fig.canvas)
+                pan_handler = panhandler(self.fig)
+                display(self.fig.canvas)
+                self.canvas = FigureCanvasTkAgg(self.fig, master=window)  
+                self.canvas.draw()
+                self.canvas.get_tk_widget().pack(side=TOP, expand=1)
+                self.toolbar = NavigationToolbar2Tk(self.canvas, window, pack_toolbar=True)
+                self.toolbar.update()
+            else:
+                error_box = messagebox.showerror("Error", "Click Upload button to upload files")
         else:
-            error_box = messagebox.showerror("Error", "Click Upload button to upload files")
+            messagebox.showerror("Instructions", "Please exit from this window and re-enter to do another kind of plot")
 
     def back_to_plot_file(self):
         self.plot_file()
 
     def scatter_file(self):
-        if len(self.filePaths) >= 1:
-            # Destroy the window
-            self.toolbar.destroy()
-            self.canvas.get_tk_widget().destroy()
-            self.num_cols = 4
-            self.x_arr, self.y_arr = [], []
-            for i in self.filePaths:
-                self.x_arr.append(np.loadtxt(i)[:, 0])
-                self.y_arr.append(np.loadtxt(i)[:, 1])
-            self.fig = Figure(figsize=(3, 3))
-            self.ax = self.fig.add_subplot()
-            for i in range(len(self.x_arr)):
-                self.ax.scatter(self.x_arr[i], self.y_arr[i])
-            self.fig.tight_layout()
-            disconnect_zoom = zoom_factory(self.ax)
-            display(self.fig.canvas)
-            pan_handler = panhandler(self.fig)
-            display(self.fig.canvas)
-            self.canvas = FigureCanvasTkAgg(self.fig, master=window)  
-            self.canvas.draw()
-            self.canvas.get_tk_widget().pack(side=TOP, expand=1)
-            self.toolbar = NavigationToolbar2Tk(self.canvas, window, pack_toolbar=True)
-            self.toolbar.update()
+        if self.num_cols == 0:
+            if len(self.filePaths) >= 1:
+                # Destroy the window
+                self.toolbar.destroy()
+                self.canvas.get_tk_widget().destroy()
+                self.num_cols = 4
+                self.x_arr, self.y_arr = [], []
+                for i in self.filePaths:
+                    self.x_arr.append(np.loadtxt(i)[:, 0])
+                    self.y_arr.append(np.loadtxt(i)[:, 1])
+                self.fig = Figure(figsize=(3, 3))
+                self.ax = self.fig.add_subplot()
+                for i in range(len(self.x_arr)):
+                    self.ax.scatter(self.x_arr[i], self.y_arr[i])
+                self.fig.tight_layout()
+                disconnect_zoom = zoom_factory(self.ax)
+                display(self.fig.canvas)
+                pan_handler = panhandler(self.fig)
+                display(self.fig.canvas)
+                self.canvas = FigureCanvasTkAgg(self.fig, master=window)  
+                self.canvas.draw()
+                self.canvas.get_tk_widget().pack(side=TOP, expand=1)
+                self.toolbar = NavigationToolbar2Tk(self.canvas, window, pack_toolbar=True)
+                self.toolbar.update()
+            else:
+                error_box = messagebox.showerror("Error", "Click Upload button to upload files")
         else:
-            error_box = messagebox.showerror("Error", "Click Upload button to upload files")
+            messagebox.showerror("Instructions", "Please exit from this window and re-enter to do another kind of plot")
 
     def back_to_scatter_file(self):
         self.scatter_file()
 
     def lp_file(self):
-        if len(self.filePaths) >= 1:
-            # Destroy the window
-            self.toolbar.destroy()
-            self.canvas.get_tk_widget().destroy()
-            self.num_cols = 5
-            self.x_arr, self.y_arr = [], []
-            for i in self.filePaths:
-                self.x_arr.append(np.loadtxt(i)[:, 0])
-                self.y_arr.append(np.loadtxt(i)[:, 1])
-            self.fig = Figure(figsize=(3, 3))
-            self.ax = self.fig.add_subplot()
-            for i in range(len(self.x_arr)):
-                self.ax.plot(self.x_arr[i], self.y_arr[i], '-o')
-            self.fig.tight_layout()
-            disconnect_zoom = zoom_factory(self.ax)
-            display(self.fig.canvas)
-            pan_handler = panhandler(self.fig)
-            display(self.fig.canvas)
-            self.canvas = FigureCanvasTkAgg(self.fig, master=window)  
-            self.canvas.draw()
-            self.canvas.get_tk_widget().pack(side=TOP, expand=1)
-            self.toolbar = NavigationToolbar2Tk(self.canvas, window, pack_toolbar=True)
-            self.toolbar.update()
+        if self.num_cols == 0:
+            if len(self.filePaths) >= 1:
+                # Destroy the window
+                self.toolbar.destroy()
+                self.canvas.get_tk_widget().destroy()
+                self.num_cols = 5
+                self.x_arr, self.y_arr = [], []
+                for i in self.filePaths:
+                    self.x_arr.append(np.loadtxt(i)[:, 0])
+                    self.y_arr.append(np.loadtxt(i)[:, 1])
+                self.fig = Figure(figsize=(3, 3))
+                self.ax = self.fig.add_subplot()
+                for i in range(len(self.x_arr)):
+                    self.ax.plot(self.x_arr[i], self.y_arr[i], '-o')
+                self.fig.tight_layout()
+                disconnect_zoom = zoom_factory(self.ax)
+                display(self.fig.canvas)
+                pan_handler = panhandler(self.fig)
+                display(self.fig.canvas)
+                self.canvas = FigureCanvasTkAgg(self.fig, master=window)  
+                self.canvas.draw()
+                self.canvas.get_tk_widget().pack(side=TOP, expand=1)
+                self.toolbar = NavigationToolbar2Tk(self.canvas, window, pack_toolbar=True)
+                self.toolbar.update()
+            else:
+                error_box = messagebox.showerror("Error", "Click Upload button to upload files")
         else:
-            error_box = messagebox.showerror("Error", "Click Upload button to upload files")
+            messagebox.showerror("Instructions", "Please exit from this window and re-enter to do another kind of plot")
 
     def back_to_lp_file(self):
         self.lp_file()
 
     def plot3d(self):
-        if len(self.filePaths) >= 1:
-            # Destroy the window
-            self.toolbar.destroy()
-            self.canvas.get_tk_widget().destroy()
-            self.num_cols = 3
-            self.x_arr, self.y_arr, self.z_arr = [], [], []
-            for i in self.filePaths:
-                self.x_arr.append(np.loadtxt(i)[:, 0])
-                self.y_arr.append(np.loadtxt(i)[:, 1])
-                self.z_arr.append(np.loadtxt(i)[:, 2])
-            self.fig = Figure(figsize=(3, 3))
-            self.ax = self.fig.add_subplot(projection ='3d')
-            for i in range(len(self.x_arr)):
-                self.ax.plot3D(self.x_arr[i], self.y_arr[i], self.z_arr[i])
-            self.fig.tight_layout()
-            disconnect_zoom = zoom_factory(self.ax)
-            display(self.fig.canvas)
-            pan_handler = panhandler(self.fig)
-            display(self.fig.canvas)
-            self.canvas = FigureCanvasTkAgg(self.fig, master=window)  
-            self.canvas.draw()
-            self.canvas.get_tk_widget().pack(side=TOP, expand=1)
-            self.toolbar = NavigationToolbar2Tk(self.canvas, window, pack_toolbar=True)
-            self.toolbar.update()
+        if self.num_cols == 0:
+            if len(self.filePaths) >= 1:
+                # Destroy the window
+                self.toolbar.destroy()
+                self.canvas.get_tk_widget().destroy()
+                self.num_cols = 3
+                self.x_arr, self.y_arr, self.z_arr = [], [], []
+                for i in self.filePaths:
+                    self.x_arr.append(np.loadtxt(i)[:, 0])
+                    self.y_arr.append(np.loadtxt(i)[:, 1])
+                    self.z_arr.append(np.loadtxt(i)[:, 2])
+                self.fig = Figure(figsize=(3, 3))
+                self.ax = self.fig.add_subplot(projection ='3d')
+                for i in range(len(self.x_arr)):
+                    self.ax.plot3D(self.x_arr[i], self.y_arr[i], self.z_arr[i])
+                self.fig.tight_layout()
+                disconnect_zoom = zoom_factory(self.ax)
+                display(self.fig.canvas)
+                pan_handler = panhandler(self.fig)
+                display(self.fig.canvas)
+                self.canvas = FigureCanvasTkAgg(self.fig, master=window)  
+                self.canvas.draw()
+                self.canvas.get_tk_widget().pack(side=TOP, expand=1)
+                self.toolbar = NavigationToolbar2Tk(self.canvas, window, pack_toolbar=True)
+                self.toolbar.update()
+            else:
+                error_box = messagebox.showerror("Error", "Click Upload button to upload files")
         else:
-            error_box = messagebox.showerror("Error", "Click Upload button to upload files")
+            messagebox.showerror("Instructions", "Please exit from this window and re-enter to do another kind of plot")
 
     def back_to_plot3d_file(self):
         self.plot3d()
@@ -1195,7 +1207,7 @@ class plot_save:
             error_box = messagebox.showerror("Instructions", "Please upload any file")
 
     def set_color(self):
-        if self.num_cols != 6 or self.num_cols != 2.5:
+        if self.num_cols == 6 or self.num_cols == 2.5:
             messagebox.showerror("Instructions", "You can't set color for this plot")
 
         elif len(self.filePaths) >= 1:
@@ -1253,75 +1265,83 @@ class plot_save:
         else:
             error_box = messagebox.showerror("Instructions", "Please upload any file")
 
-
     def set_hist(self):
-        if len(self.filePaths) >= 1:
-            self.bin_lbl = Label(window, text="Set bin", bg="white")
-            self.range_lbl = Label(window, text="Set range", bg="white")
-            self.density_lbl = Label(window, text="Set density", bg="white")
-            self.width_lbl = Label(window, text="Set bar width", bg="white")
-            self.color_lbl = Label(window, text="Set color", bg="white")
-            self.bin_lbl.place(x=5, y=380)
-            self.range_lbl.place(x=5, y=420)
-            self.density_lbl.place(x=5, y=440)
-            self.width_lbl.place(x=5, y=460)
-            self.color_lbl.place(x=5, y=500)
-            # Entries
-            self.bin_entry = Entry(window, width=7)
-            self.range_entry_low = Entry(window, width=5)
-            self.range_entry_high = Entry(window, width=5)
-            self.density_entry = Entry(window, width=10)
-            self.width_entry = Entry(window, width=5)
-            self.color_entry = Entry(window, width=10)
-            self.bin_entry.place(x=90, y=380)
-            self.range_entry_low.place(x=90, y= 420)
-            self.range_entry_high.place(x=150, y= 420)
-            self.density_entry.place(x=90, y=440)
-            self.width_entry.place(x=90, y=460)
-            self.color_entry.place(x=90, y=500)
-            # Replot button
-            btn_replot = Button(window, text="Replot", height=1, width=5+self.p, command=lambda: self.hist_file())
-            btn_replot.place(x=72, y=5)
+        if self.num_cols == 0:
+            if len(self.filePaths) >= 1:
+                self.bin_lbl = Label(window, text="Set bin", bg="white")
+                self.range_lbl = Label(window, text="Set range", bg="white")
+                self.density_lbl = Label(window, text="Set density", bg="white")
+                self.width_lbl = Label(window, text="Set bar width", bg="white")
+                self.color_lbl = Label(window, text="Set color", bg="white")
+                self.bin_lbl.place(x=5, y=380)
+                self.range_lbl.place(x=5, y=420)
+                self.density_lbl.place(x=5, y=440)
+                self.width_lbl.place(x=5, y=460)
+                self.color_lbl.place(x=5, y=500)
+                # Entries
+                self.bin_entry = Entry(window, width=7)
+                self.range_entry_low = Entry(window, width=5)
+                self.range_entry_high = Entry(window, width=5)
+                self.density_entry = Entry(window, width=10)
+                self.width_entry = Entry(window, width=5)
+                self.color_entry = Entry(window, width=10)
+                self.bin_entry.place(x=90, y=380)
+                self.range_entry_low.place(x=90, y= 420)
+                self.range_entry_high.place(x=150, y= 420)
+                self.density_entry.place(x=90, y=440)
+                self.width_entry.place(x=90, y=460)
+                self.color_entry.place(x=90, y=500)
+                # Replot button
+                btn_replot = Button(window, text="Replot", height=1, width=5+self.p, command=lambda: self.hist_file())
+                btn_replot.place(x=72, y=5)
+            else:
+                error_box = messagebox.showerror("Instructions", "Please do any kind of plot")
         else:
-            error_box = messagebox.showerror("Instructions", "Please do any kind of plot")
+            messagebox.showerror("Instructions", "Please exit from this window and re-enter to do another kind of plot")
 
     def set_colorbar(self):
-        if len(self.filePaths) >= 1:
-            self.colormap_lbl = Label(window, text="Set colormap", bg="white")
-            self.colormap_entry = Entry(window, width=10)
-            self.colormap_lbl.place(x=5, y=380)
-            self.colormap_entry.place(x=100, y=380)
-            self.colorbar_lbl = Label(window, text="Set colorbar", bg="white")
-            self.colorbar_entry = Entry(window, width=10)
-            self.colorbar_lbl.place(x=5, y=410)
-            self.colorbar_entry.place(x=100, y=410)
-            self.widthbar_lbl = Label(window, text="bar width", bg="white")
-            self.lgd_string_lbl = Label(window, text="z-label", bg="white")
-            self.widthbar_entry = Entry(window, width=3)
-            self.lgd_string_entry = Entry(window, width=10)
-            self.widthbar_lbl.place(x=5, y=440)
-            self.widthbar_entry.place(x=100, y=440)
-            self.lgd_string_lbl.place(x=5, y=470)
-            self.lgd_string_entry.place(x=100, y=470)
-            self.colorbar_label_lbl = Label(window, text="Labelsize", bg="white")
-            self.colorbar_label_entry = Entry(window, width=3)
-            self.colorbar_label_lbl.place(x=5, y=500)
-            self.colorbar_label_entry.place(x=100, y=500)
-            # Replot button
-            btn_replot = Button(window, text="Replot", height=1, width=5+self.p, command=lambda: self.colorbar_file())
-            btn_replot.place(x=72, y=5)
+        if self.num_cols == 0:
+            if len(self.filePaths) >= 1:
+                self.colormap_lbl = Label(window, text="Set colormap", bg="white")
+                self.colormap_entry = Entry(window, width=10)
+                self.colormap_lbl.place(x=5, y=380)
+                self.colormap_entry.place(x=100, y=380)
+                self.colorbar_lbl = Label(window, text="Set colorbar", bg="white")
+                self.colorbar_entry = Entry(window, width=10)
+                self.colorbar_lbl.place(x=5, y=410)
+                self.colorbar_entry.place(x=100, y=410)
+                self.widthbar_lbl = Label(window, text="bar width", bg="white")
+                self.lgd_string_lbl = Label(window, text="z-label", bg="white")
+                self.widthbar_entry = Entry(window, width=3)
+                self.lgd_string_entry = Entry(window, width=10)
+                self.widthbar_lbl.place(x=5, y=440)
+                self.widthbar_entry.place(x=100, y=440)
+                self.lgd_string_lbl.place(x=5, y=470)
+                self.lgd_string_entry.place(x=100, y=470)
+                self.colorbar_label_lbl = Label(window, text="Labelsize", bg="white")
+                self.colorbar_label_entry = Entry(window, width=3)
+                self.colorbar_label_lbl.place(x=5, y=500)
+                self.colorbar_label_entry.place(x=100, y=500)
+                # Replot button
+                btn_replot = Button(window, text="Replot", height=1, width=5+self.p, command=lambda: self.colorbar_file())
+                btn_replot.place(x=72, y=5)
+            else:
+                error_box = messagebox.showerror("Instructions", "Click Upload button to upload files")
         else:
-            error_box = messagebox.showerror("Instructions", "Click Upload button to upload files")
+            messagebox.showerror("Instructions", "Please exit from this window and re-enter to do another kind of plot")
 
     def set_contour(self):
-        messagebox.showinfo("Instructions", "Write a function and click Upload button")
-        self.func_lbl = Label(window, text="f(x, y) = ", bg="white")
-        self.func_lbl.place(x=5, y=360)
-        self.func_entry = Entry(window, width=10)
-        self.func_entry.place(x=60, y=360)
-        # plot button
-        btn_replot = Button(window, text="Plot", height=1, width=5+self.p, command=lambda: self.contour_file())
-        btn_replot.place(x=72, y=5)
+        if self.num_cols == 0:
+            messagebox.showinfo("Instructions", "Write a function and click Upload button")
+            self.func_lbl = Label(window, text="f(x, y) = ", bg="white")
+            self.func_lbl.place(x=5, y=360)
+            self.func_entry = Entry(window, width=10)
+            self.func_entry.place(x=60, y=360)
+            # plot button
+            btn_replot = Button(window, text="Plot", height=1, width=5+self.p, command=lambda: self.contour_file())
+            btn_replot.place(x=72, y=5)
+        else:
+            messagebox.showerror("Instructions", "Please exit from this window and re-enter to do another kind of plot")
 
     def set_back(self):
         if self.num_cols == 2:
